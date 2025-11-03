@@ -21,10 +21,20 @@ class _RedisConfig(BaseModel):
     ttl: int = Field(default=604800, description="Redis saved value TTL in seconds")
     prefix: str = Field(default="ak:sessions:", description="Key prefix for Redis session storage")
 
+class _MongoConfig(BaseModel):
+    """
+    MongoDB session storage configuration.
+    """
+    url: str = Field(default="mongodb://localhost:27017/", description="MongoDB connection URL.")
+    database: str = Field(default="agent_sessions", description="The name of the database to use for sessions.")
+    collection: str = Field(default="sessions", description="The name of the collection to store session documents.")
+    ttl: int = Field(default=604800, description="Session TTL in seconds. MongoDB's TTL index will purge documents after this duration.")
+
 
 class _SessionStoreConfig(BaseModel):
-    type: str = Field(default="in_memory", pattern="^(in_memory|redis)$")
+    type: str = Field(default="in_memory", pattern="^(in_memory|redis|mongo)$")
     redis: Optional[_RedisConfig] = _RedisConfig()
+    mongo: Optional[_MongoConfig] = _MongoConfig()
 
 
 class _RoutesConfig(BaseModel):

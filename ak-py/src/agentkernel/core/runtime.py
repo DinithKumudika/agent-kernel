@@ -7,14 +7,14 @@ from typing import Any
 
 from .base import Agent, Session
 from .config import AKConfig
-from .sessions import InMemorySessionStore, SessionStore, RedisSessionStore
+from .sessions import InMemorySessionStore, SessionStore, RedisSessionStore, MongoSessionStore
 from .sessions.redis import RedisDriver
-
+from .sessions.mongo import MongoDriver
 
 class _MemoryType(StrEnum):
     IN_MEMORY = "IN_MEMORY"
     REDIS = "REDIS"
-
+    MONGO = "MONGO"
 
 class Runtime:
     """
@@ -34,6 +34,9 @@ class Runtime:
         if memory_type == _MemoryType.REDIS:
             self._sessions = RedisSessionStore(RedisDriver())
             self._log.info("Using Redis session store")
+        elif memory_type == _MemoryType.MONGO:
+            self._sessions = MongoSessionStore(MongoDriver())
+            self._log.info("Using Mongo session store")
         else:
             self._log.info("Using in-memory session store")
             self._sessions = InMemorySessionStore()

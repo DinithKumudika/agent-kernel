@@ -13,3 +13,4 @@ except importlib.metadata.PackageNotFoundError:
 from .in_memory import InMemorySessionStore
 from .base import SessionStore
 from .redis import RedisSessionStore
+from .mongo import MongoSessionStore
