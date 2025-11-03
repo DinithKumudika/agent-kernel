@@ -21,10 +21,10 @@ class MongoDriver:
 
     def __init__(self):
         self._log = logging.getLogger("ak.core.sessions.mongo.util")
-        self._url = AKConfig.get().session.mongodb.url
-        self._database_name = AKConfig.get().session.mongodb.database
-        self._collection_name = AKConfig.get().session.mongodb.collection
-        self._ttl = int(AKConfig.get().session.mongodb.ttl)
+        self._url = AKConfig.get().session.mongo.url
+        self._database_name = AKConfig.get().session.mongo.database
+        self._collection_name = AKConfig.get().session.mongo.collection
+        self._ttl = int(AKConfig.get().session.mongo.ttl)
 
     @property
     def collection(self) -> pymongo.collection.Collection:
