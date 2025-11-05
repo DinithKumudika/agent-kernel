@@ -1,17 +1,18 @@
 import logging
 
 import uvicorn
-from fastapi import FastAPI, APIRouter
+from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
-from .agent import AgentRESTRequestHandler
+from ..api.rest_request_handler import RESTRequestHandler
 from ..core.config import AKConfig
+from .agent import AgentRESTRequestHandler
 
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    force=True
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    force=True,
 )
 
 
@@ -20,6 +21,7 @@ class RESTAPI:
     Handles the initialization and running of the REST API server.
     Can run any FastAPI app instance or assemble one from routers.
     """
+
     _log = logging.getLogger("ak.api.restapi")
     _custom_routers = []
 
@@ -37,7 +39,7 @@ class RESTAPI:
             allow_origins=["*"],
             allow_credentials=True,
             allow_methods=["*"],
-            allow_headers=["*"]
+            allow_headers=["*"],
         )
 
         for r in routers or []:
@@ -61,23 +63,29 @@ class RESTAPI:
         cls._custom_routers.append(router)
 
     @classmethod
-    def run(cls):
+    def run(cls, handlers: list[RESTRequestHandler] = None):
         """
         Starts the REST API server.
         """
+        if handlers is None:
+            handlers = [AgentRESTRequestHandler()]
         host = AKConfig.get().api.host
         port = AKConfig.get().api.port
         cls._log.info(f"Agent Kernel REST API listening on http://{host}:{port}")
 
         routers = []
-        if AKConfig.get().api.enabled_routes.agents:
-            routers.append(AgentRESTRequestHandler.get_router())
+        for handler in handlers:
+            if handler is not None:
+                routers.append(handler.get_router())
+
         if AKConfig.get().a2a.enabled:
             from .a2a import A2ARESTRequestHandler
+
             routers.append(A2ARESTRequestHandler.get_catalog_router())
             routers.extend(A2ARESTRequestHandler.get_agent_routers())
         if AKConfig.get().mcp.enabled:
             from ..mcp.akmcp import MCP
+
             mcp_app = MCP.get_http_app()
             app = cls._create_app(routers=routers, lifespan=mcp_app.lifespan)
             app.mount("/mcp", mcp_app)

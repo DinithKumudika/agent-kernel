@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
 authors = [
-    { name = "Yaala Labs", email = "info@yaalalabs.com" }
+    { name = "Yaala Labs", email = "agentkernel@yaalalabs.com" }
 ]
 dependencies = [
     "a2a-sdk>=0.3.8",
@@ -53,6 +53,9 @@ api = [
     "uvicorn>=0.37.0",
     "gunicorn>=23.0.0"
 ]
+slack = [
+    "slack-bolt==1.22.0"
+]
 test = [
     "pytest>=8.4.1",
     "pytest-asyncio>=1.2.0",
@@ -81,20 +84,18 @@ package = true
 
 [tool.isort]
 profile = "black"
-line_length = 88
+line_length = 120
 
 [tool.mypy]
 python_version = "3.12"
-
-# Common tool configurations that apply to all packages
-[tool.black]
-line-length = 88
-target-version = ["py312"]
-
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]
 
 [tool.pytest.ini_options]
 addopts = "--cov=src --cov-report=term --cov-report=html --html=report.html"

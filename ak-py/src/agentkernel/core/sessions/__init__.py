@@ -3,6 +3,7 @@ Agent Kernel Core.
 
 This package contains the Agent Kernel session store implementation.
 """
+
 import importlib.metadata
 
 try:
@@ -10,7 +11,7 @@ try:
 except importlib.metadata.PackageNotFoundError:
     __version__ = "0.1.0"
 
-from .in_memory import InMemorySessionStore
 from .base import SessionStore
+from .in_memory import InMemorySessionStore
 from .redis import RedisSessionStore
 from .mongo import MongoSessionStore
