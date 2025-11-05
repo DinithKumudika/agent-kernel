@@ -13,11 +13,16 @@ authors = [
     { name = "Yaala Labs", email = "info@yaalalabs.com" }
 ]
 dependencies = [
+    "a2a-sdk>=0.3.8",
+    "fastapi>=0.119.0",
+    "openai-agents>=0.3.3",
     "pydantic>=2.11.7",
     "pydantic-settings>=2.10.1",
     "pymongo>=4.15.3",
     "pyyaml>=6.0.2",
+    "rapidfuzz>=3.14.1",
     "redis>=6.4.0",
+    "uvicorn[standard]>=0.37.0",
 ]
 
 [project.optional-dependencies]
